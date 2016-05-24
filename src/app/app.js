@@ -3,29 +3,58 @@
  */
 angular.module("App", ['infinite-scroll'])
 
-    .factory('Person', function(){
+    .service('urlHelper', function(){
+        this.getQueryString = function(){
+            return window.location.search;
+        };
+
+        this.parseQueryString = function(qstr){
+            if(!qstr){
+                qstr = this.getQueryString();
+            }
+            var query = {};
+            var a = qstr.substr(1).split('&');
+            for (var i = 0; i < a.length; i++) {
+                var b = a[i].split('=');
+                query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+            }
+            delete query[""];
+            return query;
+        };
+
+        this.getRandomInt = function(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        };
+
+        this.getRandomParam = function() {
+            return 'r=' + (this.getRandomInt(1, 999999)).toString();
+        };
+    })
+
+    .factory('Person', function(urlHelper, $http){
         var Person = function() {
             this.items = [];
             this.busy = false;
             this.after = '';
+            this.page = 1
         };
 
         Person.prototype.nextPage = function() {
             if (this.busy) return;
             this.busy = true;
 
-            for(var i=0; i<=10; i++) {
-                this.items.push({
-                    name: faker.name.findName(),
-                    email: faker.internet.email(),
-                    address: faker.address.streetAddress(),
-                    bio: faker.lorem.sentence(),
-                    image: faker.image.avatar()
-                });
-            }
-
-            this.after = "t3_" + this.items[this.items.length - 1];
-            this.busy = false;
+            var url = "http://127.0.0.1:3000/people.json?page=" + this.page;
+            $http({
+                url: url
+            }).success(function(response) {
+                var items = response;
+                for (var i = 0; i < items.length; i++) {
+                    this.items.push(items[i]);
+                }
+                this.after = "t3_" + this.items[this.items.length - 1];
+                this.page += 1;
+                this.busy = false;
+            }.bind(this));
         };
 
         return Person;
