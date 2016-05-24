@@ -1,0 +1,16 @@
+{
+  "name": "angular_scroll",
+  "version": "0.0.0",
+  "description": "Aplication test",
+  "main": "index.js",
+  "dependencies": {
+    "faker": "^3.1.0",
+    "http-server": "^0.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}
