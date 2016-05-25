@@ -15,6 +15,13 @@
     <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
 
     <script src="src/app/app.js"></script>
+    <script src="src/app/config/config.js"></script>
+    <script src="src/app/providers/api.js"></script>
+    <script src="src/app/directives/comment.js"></script>
+    <script src="src/app/models/coment.js"></script>
+    <script src="src/app/controllers/commentsCtrl.js"></script>
+    <script src="src/app/helpers/urlHelper.js"></script>
+    <script src="src/app/helpers/ecsHelper.js"></script>
 
 </head>
 <body>
@@ -26,30 +33,15 @@
 <div class="container" ng-app="App">
     <h3>People List</h3>
 
-    <div class="row" ng-controller="paginationCtrl">
+    <div class="row" ng-controller="commentsCtrl">
 
-        <div infinite-scroll='person.nextPage()' infinite-scroll-disabled='person.busy' infinite-scroll-distance='1'>
-            <div ng-repeat='person in person.items' class="row-fluid panel panel-default" >
-
-                <div class="panel-body">
-
-                    <div class="col-md-3">
-                        <img ng-src="{{ person.image }}" alt="{{ person.image }}" class="img-circle" style="max-height: 100px">
-                    </div>
-                    <div class="col-md-9">
-                        <ul class="list-unstyled">
-                            <li><strong>Name: </strong>{{ person.name }}</li>
-                            <li><strong>Email: </strong>{{ person.email }}</li>
-                            <li><strong>Address: </strong>{{ person.address }}</li>
-                            <li><strong>Birthdate: </strong>{{ person.birthdate }}</li>
-                        </ul>
-                    </div>
-
-                </div>
+        <div infinite-scroll='paginator.nextPage()' infinite-scroll-disabled='paginator.busy' infinite-scroll-distance='3' infinite-scroll-immediate-check="true">
+            <div ng-repeat='comment in paginator.items' >
+                <comment comment="comment"></comment>
             </div>
-            <div ng-show='busy'><i class="glyphicon glyphicon-refresh"></i> Loading data...</div>
-
         </div>
+
+        <div ng-show='paginator.busy'><i class="glyphicon glyphicon-refresh"></i> Loading data...</div>
     </div>
 
 </div>
