@@ -5,6 +5,7 @@
     <title>Infinite pagination</title>
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="src/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -17,11 +18,9 @@
     <script src="src/app/app.js"></script>
     <script src="src/app/config/config.js"></script>
     <script src="src/app/providers/api.js"></script>
-    <script src="src/app/directives/comment.js"></script>
-    <script src="src/app/models/coment.js"></script>
     <script src="src/app/controllers/commentsCtrl.js"></script>
-    <script src="src/app/helpers/urlHelper.js"></script>
-    <script src="src/app/helpers/ecsHelper.js"></script>
+    <script src="src/app/factories/comments.js"></script>
+    <script src="src/app/services/uri.js"></script>
 
 </head>
 <body>
@@ -33,15 +32,49 @@
 <div class="container" ng-app="App">
     <h3>People List</h3>
 
-    <div class="row" ng-controller="commentsCtrl">
+    <div class="row" ng-controller="commentsCtrl" >
 
-        <div infinite-scroll='paginator.nextPage()' infinite-scroll-disabled='paginator.busy' infinite-scroll-distance='3' infinite-scroll-immediate-check="true">
-            <div ng-repeat='comment in paginator.items' >
-                <comment comment="comment"></comment>
+        <div infinite-scroll='comments.nextPage()' infinite-scroll-disabled='comments.busy' infinite-scroll-distance='5'>
+            <div ng-repeat='comment in comments.items' class="row panel panel-default comment-item">
+
+                <div class="panel-body">
+                    <div class="col-md-3">
+                        <img ng-src="{{ comment.image }}" class="img-circle" style="max-height: 100px; border: 2px solid #cccccc;">
+                    </div>
+                    <div class="col-md-9">
+                        <ul class="list-unstyled">
+                            <li><strong>Name: </strong>{{ comment.name }}</li>
+                            <li><strong>Email: </strong>{{ comment.email }}</li>
+                            <li><strong>Address: </strong>{{ comment.address }}</li>
+                            <li><strong>Birthdate: </strong>{{ comment.birthdate }}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel-footer" style="background: #ffffff; border-top: 0">
+                    <div class="container" ng-if="comment.status == 'new_found'">
+                        <a href="#"><i class="fa fa-thumbs-o-down"></i> Reprove</a> &nbsp
+                        <a href="#"><i class="fa fa-tv"></i> Publish</a>
+                    </div>
+
+                    <div class="container" ng-if="comment.status == 'published'">
+                        <a href="#"><i class="fa fa-undo"></i> Unpublish</a> &nbsp
+                        <a href="#"><i class="fa fa-tv"></i> Republish</a>
+                        <a href="#" class="btn btn-default btn-xs pull-right" title="Remove"><i class="fa fa-remove"></i></a>
+                        <a href="#" class="btn btn-default btn-xs pull-right" title="Picture"><i class="fa fa-file-picture-o"></i></a>
+                        <a href="#" class="btn btn-default btn-xs pull-right" title="Orad"><i class="fa fa-file-text-o"></i></a>
+                    </div>
+
+                    <div class="container" ng-if="comment.status == 'reproved'">
+                        <a href="#"><i class="fa fa-recycle"></i> Restore</a> &nbsp
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div ng-show='paginator.busy'><i class="glyphicon glyphicon-refresh"></i> Loading data...</div>
+        <div ng-show='comments.busy' ng-hide="comments.end"><i class="fa fa-hourglass-half"></i> Loading comments...</div>
+        <div ng-show="comments.end"><i class="fa fa-comments-o"></i> No more comments available...</div>
     </div>
 
 </div>

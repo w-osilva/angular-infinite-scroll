@@ -9,7 +9,7 @@ class PeopleController < ApplicationController
     params[:limit] ||= 30
     @people =
       case params[:status]
-        when 'aproved' then Person.aproved
+        when 'published' then Person.published
         when 'reproved' then Person.reproved
         else Person.new_found
       end

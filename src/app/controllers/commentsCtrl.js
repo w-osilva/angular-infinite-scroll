@@ -1,3 +1,3 @@
-App.controller('commentsCtrl', function($scope, api){
-    $scope.paginator = new Comment(api);
+App.controller('commentsCtrl', function($scope, comments){
+    $scope.comments = comments;
 });

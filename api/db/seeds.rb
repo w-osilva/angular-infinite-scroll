@@ -14,6 +14,6 @@
     email: Faker::Internet.email,
     address: "#{Faker::Address.street_address}, #{Faker::Address.city}",
     image: Faker::Avatar.image,
-    status: Person.statuses[ ['new_found', 'aproved', 'reproved'].sample ]
+    status: Person.statuses[ ['new_found', 'reproved', 'published', 'completed'].sample ]
   })
 end
